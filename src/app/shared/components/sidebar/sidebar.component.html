@@ -1,8 +1,8 @@
 <mat-nav-list>
   <div class="profile-card">
     <div class="header">
-      <h2>tamir</h2>
-      <h4>asd@asd.com</h4>
+      <h3>{{authService.currentUserValue?.username}}</h3>
+<!--      <h4>{{authService.currentUserValue?.firstName}} {{authService.currentUserValue?.lastName}}</h4>-->
     </div>
     <img src="https://wallpapercave.com/wp/wp8493226.jpg" alt="tamir">
   </div>
@@ -14,6 +14,8 @@
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/">Dashboard</a>
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/posts">Posts</a>
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/articles">Articles</a>
+
+  <div *ngIf="userLoggedIn!=null && userLoggedIn!.role=='Admin'">
   <mat-divider></mat-divider>
 
   <h2 matSubheader>Tools</h2>
@@ -26,6 +28,7 @@
     <mat-icon>contact_phone</mat-icon>
     Leads
   </a>
+  </div>
 
 </mat-nav-list>
 

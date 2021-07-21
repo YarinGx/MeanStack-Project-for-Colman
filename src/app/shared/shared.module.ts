@@ -14,6 +14,14 @@ import {RouterModule} from "@angular/router";
 import { AreaComponent } from './widgets/area/area.component';
 import {HighchartsChartModule} from "highcharts-angular";
 import { CardComponent } from './widgets/card/card.component';
+import { LoginComponent } from './components/login/login.component';
+import {MatCardModule} from "@angular/material/card";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { RegisterComponent } from './components/register/register.component';
+import { ErrorComponent } from './components/error/error.component';
 
 
 
@@ -23,7 +31,10 @@ import { CardComponent } from './widgets/card/card.component';
     FooterComponent,
     SidebarComponent,
     AreaComponent,
-    CardComponent
+    CardComponent,
+    LoginComponent,
+    RegisterComponent,
+    ErrorComponent
   ],
   exports: [
     SidebarComponent,
@@ -42,7 +53,12 @@ import { CardComponent } from './widgets/card/card.component';
     MatMenuModule,
     MatListModule,
     RouterModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule
   ]
 })
 export class SharedModule { }

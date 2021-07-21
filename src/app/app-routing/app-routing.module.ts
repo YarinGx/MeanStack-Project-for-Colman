@@ -3,6 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {DefaultComponent} from "../layouts/default/default.component";
 import {DashboardComponent} from "../modules/dashboard/dashboard.component";
 import {PostsComponent} from "../modules/posts/posts.component";
+import {AuthGuard} from "../services/authGuard";
+import {Role} from "../_models";
+import {LoginComponent} from "../shared/components/login/login.component";
+import {RegistryDomSchemaChecker} from "@angular/compiler-cli/src/ngtsc/typecheck/src/dom";
+import {RegisterComponent} from "../shared/components/register/register.component";
+import {ErrorComponent} from "../shared/components/error/error.component";
+import {AdminComponent} from "../modules/admin/admin.component";
 
 const routes: Routes = [
   {
@@ -10,13 +17,32 @@ const routes: Routes = [
     component: DefaultComponent,
     children: [{
       path: '',
-      component: DashboardComponent
+      component: DashboardComponent,
+      // canActivate: [AuthGuard],
+      // data: { roles: [Role.User] }
     },{
       path: 'posts',
-      component: PostsComponent
+      component: PostsComponent,
+      canActivate: [AuthGuard],
+      data: { roles: [Role.Admin] }
+    },{
+      path: 'login',
+      component: LoginComponent
+    },{
+      path: 'register',
+      component: RegisterComponent
+    },{
+      path: 'error',
+      component: ErrorComponent
+    },{
+      path: 'admin',
+      component: AdminComponent,
+      canActivate: [AuthGuard],
+      data: { roles: [Role.Admin] }
     }
     ]
-  }
+  },
+
 ];
 
 @NgModule({

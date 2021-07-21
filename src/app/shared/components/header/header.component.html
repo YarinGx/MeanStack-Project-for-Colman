@@ -8,7 +8,7 @@
 
     <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
       <ul fxLayout="row" fxLayoutGap="20px">
-        <li>
+        <li *ngIf="userLoggedIn!=null && userLoggedIn!.role=='Admin'" [routerLink]="['/admin']" >
           <button mat-icon-button>
             <mat-icon>settings</mat-icon>
           </button>
@@ -22,8 +22,14 @@
           <button mat-button [matMenuTriggerFor]="menu">
             <mat-icon>person_outline</mat-icon>
           </button>
+<!--          /login?returnUrl=%2Fposts-->
+
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>
+            <button *ngIf="userLoggedIn==null" mat-menu-item [routerLink]="['/login']"  [queryParams]="{ returnUrl: currentRoute }" routerLinkActive="active">
+              <mat-icon>login</mat-icon>
+              Login
+            </button>
+            <button mat-menu-item *ngIf="userLoggedIn!=null" (click)="authService.logout()">
               <mat-icon>exit_to_app</mat-icon>
               Sign Out
             </button>
