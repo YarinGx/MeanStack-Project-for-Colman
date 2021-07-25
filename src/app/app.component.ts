@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Role, User} from "./_models";
 import {Router} from "@angular/router";
 import {AuthService} from "./services/auth.service";
+import {Map} from 'leaflet';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,15 @@ export class AppComponent {
   title = 'finalProject3';
   currentUser!: User | null;
 
+
   constructor(
     private router: Router,
     private authenticationService: AuthService
   ) {
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
+
+
 
   get isAdmin() {
     return this.currentUser && this.currentUser.role === Role.Admin;

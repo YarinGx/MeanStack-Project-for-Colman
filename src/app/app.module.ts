@@ -11,6 +11,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./services/auth.service";
 import {AuthInterceptor} from "./services/interceptors/AuthInterceptor";
 import { AdminComponent } from './modules/admin/admin.component';
+import { ReviewListComponent } from './modules/review/review-list/review-list.component';
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { AdminComponent } from './modules/admin/admin.component';
     DefaultModule,
     AppRoutingModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     AuthService,

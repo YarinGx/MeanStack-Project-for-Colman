@@ -1,8 +1,67 @@
-<highcharts-chart
-  [Highcharts]="Highcharts"
+<mat-spinner *ngIf="isLoading" class="custom-spinner"></mat-spinner>
 
-  [options]="chartOptions"
+<mat-accordion multi="true" *ngIf="scraps.length > 0 && !isLoading">
+
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search by name" [(ngModel)]="searchStr" />
+      <input type="text" class="form-control" placeholder="Search by address" [(ngModel)]="searchAddress" />
+    </div>
+    <mat-form-field appearance="fill">
+      <mat-select [(ngModel)]="selectedCity" name="food">
+        <mat-option *ngFor="let city of cities" [value]="city">
+          {{city}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  <mat-expansion-panel (closed)="panStatusCreate('create')" (opened)="panStatusCreate('create')" *ngFor="let scrap of scraps.slice().reverse() | HotelTitleFilter:searchStr | HotelAddressFilter:searchAddress | HotelCityFilter:selectedCity">
+    <mat-expansion-panel-header dir="rtl">
+      <strong id=hotel_name>{{ scrap.name }}</strong>
+    </mat-expansion-panel-header>
+    <div id=hotel_desc dir="rtl">
+      <strong>תיאור:</strong> <p>{{ scrap.description }}</p><br>
+      <strong>כתובת:</strong> <br><p>{{ scrap.address }}</p><br>
+      <div class="row">
+        <div class="column">
+          <div class="hotel_image" *ngIf="scrap.img!=null">
+            <img [src]="scrap.img" [alt]="scrap.name">
+          </div>
+        </div>
+        <div class="column">
+          <div class="fs-container" >
+            <app-map
+              [latitude]=scrap.latitude
+              [longitude]=scrap.longitude
+              (map$)="receiveMap($event)"
+              (zoom$)="receiveZoom($event)"
+              id='main-map'
+            ></app-map></div>
+        </div>
+      </div>
+    </div>
 
 
-  style="width: 100%; height: 400px; display: block;"
-></highcharts-chart>
+    <app-review-list [hotelId]=scrap._id (panStatus)="panStatusCreate($event)" (newItemEvent)="gotoelement($event,form)">
+
+    </app-review-list >
+    <div #form>
+    <app-review
+      [hotelId]=scrap._id
+      [events]="editReviewSubject.asObservable()"
+      [mode]="mode.asObservable()"
+    >
+    </app-review>
+    </div>
+
+
+
+
+  </mat-expansion-panel>
+
+
+
+</mat-accordion>
+<mat-paginator [length]="totoalScraps" [pageSize]="scrapsPerPage" [pageSizeOptions]="pageSizeOptions"
+               (page)="onChangePage($event)" *ngIf="scraps.length > 0"></mat-paginator>
+<p class="info-text mat-body-1" *ngIf="scraps.length <= 0 && !isLoading"><mark>No recipes added yet!</mark></p>
+

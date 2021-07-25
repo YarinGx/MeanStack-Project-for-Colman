@@ -3,12 +3,20 @@ import { CommonModule } from '@angular/common';
 import {DefaultComponent} from "./default.component";
 import {DashboardComponent} from "../../modules/dashboard/dashboard.component";
 import {RouterModule} from "@angular/router";
-import {PostsComponent} from "../../modules/posts/posts.component";
+// import {PostsComponent} from "../../modules/posts/posts.component";
 import {SharedModule} from "../../shared/shared.module";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatDividerModule} from "@angular/material/divider";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {BrowserAnimationsModule} from    '@angular/platform-browser/animations';
+import { MatExpansionModule } from '@angular/material/expansion';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatButtonModule} from "@angular/material/button";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatInputModule} from "@angular/material/input";
+
 
 
 
@@ -16,7 +24,7 @@ import {MatCardModule} from "@angular/material/card";
   declarations: [
     DefaultComponent,
     DashboardComponent,
-    PostsComponent
+
   ],
   imports: [
     CommonModule,
@@ -25,7 +33,15 @@ import {MatCardModule} from "@angular/material/card";
     MatSidenavModule,
     MatDividerModule,
     FlexLayoutModule,
-    MatCardModule
+    MatCardModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    MatExpansionModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ]
 })
 export class DefaultModule { }

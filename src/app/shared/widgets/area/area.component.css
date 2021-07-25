@@ -1,0 +1,88 @@
+.row {
+  display: flex;
+}
+
+/* Create three equal columns that sits next to each other */
+.column {
+  flex: 1000%;
+  padding: 1px;
+}
+
+.fs-container {
+   width:400px;
+  height:400px;
+  position: absolute;
+
+
+}
+
+/*.hotel_image {*/
+/*  width:50%;*/
+/*  height:50%;*/
+
+
+/*}*/
+
+.hotel_image img {
+  width: 100%;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+:host {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+.mat-paginator {
+  display: flex;
+  justify-content: center;
+}
+
+.info-text {
+  text-align: center;
+}
+
+form-control {
+  width: 300px;
+  border: 2px groove;
+  border-radius: 4px;
+}
+
+#hotel_desc {
+  font-family: 'Mate', serif;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+#hotel_name{
+  font-family: 'Mate', serif;
+}
+
+mat-expansion-panel-header{
+  letter-spacing: 2px;
+  font-size: 20px;
+}
+/*mat-expansion-panel {*/
+/*  background-color: white;*/
+/*  color: #212529;*/
+/*}*/
+mat-panel-description{
+  margin-top: 10px;
+  color: black;
+}
+
+mat-accordion {
+  flex-grow: 1;
+}
+
+
+/* ::ng-deep .mat-form-field-appearance-legacy {
+  color: white;
+} */
+
+
+

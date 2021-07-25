@@ -4,6 +4,31 @@ const User = mongoose.model('User');
 const passport = require('passport');
 const utils = require('../lib/Utils');
 
+
+router.get("/:id", (req, res, next) => {
+  try {
+    mongoose.Types.ObjectId(req.params.id)
+  } catch (error) {
+    res.status(500).json({
+      message: "Fetching comment failed"
+    });
+  }
+
+  User.find({_id : mongoose.Types.ObjectId(req.params.id)}).then(user => {
+    if (user) {
+      res.status(200).json(user.username);
+    } else {
+      res.status(404).json({
+        message: "user not found"
+      });
+    }
+  }).catch(error => {
+    res.status(500).json({
+      message: "Fetching comment failed"
+    });
+  });
+})
+
 router.get('/protected', passport.authenticate('jwt', {session: false}), (req, res, next) => {
   res.status(200).json({sucess: true, msg: "user permitted"})
 });

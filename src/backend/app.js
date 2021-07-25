@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const passport = require('passport');
 
-/**
+/**process
  * -------------- GENERAL SETUP ----------------
  */
 
@@ -18,6 +18,7 @@ require('./config/database');
 
 // Must first load the models
 require('./models/user');
+const scrap = require("./scraping/scrap");
 
 // Pass the global passport object into the configuration function
 require('./config/passport')(passport);
@@ -50,4 +51,8 @@ app.use(require('./routes'));
  */
 
 // Server listens on http://localhost:3000
+const run_scrape = process.env.RUN_SCRAPE;
+
+if(run_scrape === 'true')
+  scrap.hotels_arr_promises();
 app.listen(3000);
