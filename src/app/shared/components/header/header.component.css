@@ -1,3 +1,8 @@
 ul li {
   list-style: none;
 }
+
+.navbar{
+  background-color: black;
+  color: white;
+}

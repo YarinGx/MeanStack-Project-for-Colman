@@ -3,17 +3,18 @@
 <mat-accordion multi="true" *ngIf="scraps.length > 0 && !isLoading">
 
     <div class="form-group">
-      <input type="text" class="form-control" placeholder="Search by name" [(ngModel)]="searchStr" />
-      <input type="text" class="form-control" placeholder="Search by address" [(ngModel)]="searchAddress" />
-    </div>
-    <mat-form-field appearance="fill">
-      <mat-select [(ngModel)]="selectedCity" name="food">
-        <mat-option *ngFor="let city of cities" [value]="city">
-          {{city}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
+      <input type="text" class="search-input" placeholder="Search hotel by name" [(ngModel)]="searchStr" />
+      <input type="text" class="search-input" placeholder="Search hotel by address" [(ngModel)]="searchAddress" />      
+    </div>        
+    <div class="choose-city">
+      <mat-form-field appearance="fill">
+        <mat-select [(ngModel)]="selectedCity" name="food">
+          <mat-option *ngFor="let city of cities" [value]="city">
+            {{city}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  </div>
   <mat-expansion-panel (closed)="panStatusCreate('create')" (opened)="panStatusCreate('create')" *ngFor="let scrap of scraps.slice().reverse() | HotelTitleFilter:searchStr | HotelAddressFilter:searchAddress | HotelCityFilter:selectedCity">
     <mat-expansion-panel-header dir="rtl">
       <strong id=hotel_name>{{ scrap.name }}</strong>
@@ -37,8 +38,10 @@
               id='main-map'
             ></app-map></div>
         </div>
-      </div>
+      </div>      
     </div>
+
+
 
 
     <app-review-list [hotelId]=scrap._id (panStatus)="panStatusCreate($event)" (newItemEvent)="gotoelement($event,form)">
@@ -63,5 +66,5 @@
 </mat-accordion>
 <mat-paginator [length]="totoalScraps" [pageSize]="scrapsPerPage" [pageSizeOptions]="pageSizeOptions"
                (page)="onChangePage($event)" *ngIf="scraps.length > 0"></mat-paginator>
-<p class="info-text mat-body-1" *ngIf="scraps.length <= 0 && !isLoading"><mark>No recipes added yet!</mark></p>
+<p class="info-text mat-body-1" *ngIf="scraps.length <= 0 && !isLoading"><mark>No Hotels added yet!</mark></p>
 

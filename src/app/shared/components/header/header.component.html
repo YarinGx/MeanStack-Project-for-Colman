@@ -1,29 +1,20 @@
-<mat-toolbar  color="primary">
+<mat-toolbar class="navbar">
   <mat-toolbar-row>
     <button mat-icon-button (click)="toggleSideBar()">
       <mat-icon>menu</mat-icon>
     </button>
-
-    <span> App Logo</span>
-
+    <span>Israel Hotels</span>
     <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
       <ul fxLayout="row" fxLayoutGap="20px">
         <li *ngIf="userLoggedIn!=null && userLoggedIn!.role=='Admin'" [routerLink]="['/admin']" >
           <button mat-icon-button>
             <mat-icon>settings</mat-icon>
           </button>
-        </li>
-        <li>
-          <button mat-icon-button>
-            <mat-icon>help_outline</mat-icon>
-          </button>
-        </li>
+        </li>        
         <li>
           <button mat-button [matMenuTriggerFor]="menu">
             <mat-icon>person_outline</mat-icon>
           </button>
-<!--          /login?returnUrl=%2Fposts-->
-
           <mat-menu #menu="matMenu">
             <button *ngIf="userLoggedIn==null" mat-menu-item [routerLink]="['/login']"  [queryParams]="{ returnUrl: currentRoute }" routerLinkActive="active">
               <mat-icon>login</mat-icon>
