@@ -1,0 +1,9 @@
+.info-text {
+  text-align: center;
+}
+.mat-content > mat-panel-title, .mat-content > mat-panel-description {
+  flex: 0 0 auto;
+}
+.right-aligned-header > .mat-content {
+  justify-content: space-between;
+}

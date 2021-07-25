@@ -1,0 +1,41 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title fxLayoutAlign="center">
+        REVIEWS
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="panel-content">
+
+      <mat-accordion displayMode="flat">
+        <p class="info-text mat-body-1" *ngIf="reviews.length <= 0" >No reviews added yet!</p>
+
+        <mat-expansion-panel (opened)="onOpen()" (closed)="onOpen()" *ngFor="let review of (reviewOb | async)?.reviews | myfilter:hotelId">
+          <mat-expansion-panel-header>
+            {{review.title}}
+          </mat-expansion-panel-header>
+
+
+          {{review.review}}
+
+          <mat-panel-description>
+            {{review.creator.username}}
+            <br>
+            {{review.reviewDate}}
+          </mat-panel-description>
+          <br>
+          <div (click)="gotoelement(review)">
+            edit
+          </div>
+
+
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </div>
+  </mat-expansion-panel>
+
+
+
+</mat-accordion>
