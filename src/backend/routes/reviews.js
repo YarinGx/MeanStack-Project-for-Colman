@@ -153,5 +153,39 @@ router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res,
   });
 });
 
+// Implement map-reduce and ggroup-by
+// router.get("/mapreduce", (req, res, next) => {
+//
+//   Review.mapReduce({hotelId : mongoose.Types.ObjectId(req.params.id)}).then(review => {
+//     if (review) {
+//       res.status(200).json(review);
+//     } else {
+//       res.status(404).json({
+//         message: "review not found"
+//       });
+//     }
+//   }).catch(error => {
+//     res.status(500).json({
+//       message: "Fetching review failed"
+//     });
+//   });
+// })
+//
+// router.get("/groupby", (req, res, next) => {
+//
+//   Review.groupby({hotelId : mongoose.Types.ObjectId(req.params.id)}).then(review => {
+//     if (review) {
+//       res.status(200).json(review);
+//     } else {
+//       res.status(404).json({
+//         message: "review not found"
+//       });
+//     }
+//   }).catch(error => {
+//     res.status(500).json({
+//       message: "Fetching review failed"
+//     });
+//   });
+// })
 
 module.exports = router;
