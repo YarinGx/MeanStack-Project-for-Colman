@@ -1,0 +1,38 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h2>Register</h2>
+      <mat-error *ngIf="registerInvalid">
+        The username already exists.
+      </mat-error>
+      <mat-form-field class="full-width-input" >
+        <input matInput placeholder="Email" matNativeControl formControlName="username" required>
+        <mat-error>
+          Please provide a valid email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <input matInput type="password" matNativeControl placeholder="Password" formControlName="password" required>
+        <mat-error>
+          Please provide a valid password
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <input matInput type="text" matNativeControl placeholder="First Name" formControlName="firstname" required>
+        <mat-error>
+          Please provide a valid password
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <input matInput type="text" matNativeControl placeholder="Last Name" formControlName="lastname" required>
+        <mat-error>
+          Please provide a valid password
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Register</button>
+      <br>
+      <br>
+      Back to <a routerLink="/login" routerLinkActive="active"> login page </a>
+    </form>
+  </mat-card-content>
+</mat-card>
