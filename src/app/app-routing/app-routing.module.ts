@@ -9,6 +9,7 @@ import {RegistryDomSchemaChecker} from "@angular/compiler-cli/src/ngtsc/typechec
 import {RegisterComponent} from "../shared/components/register/register.component";
 import {ErrorComponent} from "../shared/components/error/error.component";
 import {AdminComponent} from "../modules/admin/admin.component";
+import {ChatComponent} from "../modules/chat/chat.component";
 
 
 
@@ -31,6 +32,10 @@ const routes: Routes = [
       path: 'error',
       component: ErrorComponent
     },{
+      path: 'chat',
+      component: ChatComponent
+    }
+    ,{
       path: 'admin',
       component: AdminComponent,
       canActivate: [AuthGuard],

@@ -12,12 +12,14 @@ import {AuthService} from "./services/auth.service";
 import {AuthInterceptor} from "./services/interceptors/AuthInterceptor";
 import { AdminComponent } from './modules/admin/admin.component';
 import { ReviewListComponent } from './modules/review/review-list/review-list.component';
+import { ChatComponent } from './modules/chat/chat.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
