@@ -13,7 +13,7 @@ import {AuthInterceptor} from "./services/interceptors/AuthInterceptor";
 import { AdminComponent } from './modules/admin/admin.component';
 import { ReviewListComponent } from './modules/review/review-list/review-list.component';
 import { ChatComponent } from './modules/chat/chat.component';
-
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -28,6 +28,7 @@ import { ChatComponent } from './modules/chat/chat.component';
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
+    MatTableModule
   ],
   providers: [
     AuthService,

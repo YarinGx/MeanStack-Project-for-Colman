@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import * as moment from "moment";
-import {BehaviorSubject, Observable} from "rxjs";
-import {User} from "../_models";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {Role, User} from "../_models";
 import { HttpClient } from '@angular/common/http';
 import {environment} from "../../environments/environment";
 import { map } from 'rxjs/operators';
@@ -15,6 +15,8 @@ export class AuthService {
 
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User|null>;
+  private users: User[] = [];
+  private usersUpdated = new Subject<{ users: User[] }>();
 
   constructor(private http: HttpClient) {
     if( localStorage.getItem('currentUser') === null){
@@ -72,12 +74,35 @@ export class AuthService {
       }
     );
   }
+  getUsers() {
+    return this.http.get<{ message: string, users:any }>(
+      `${environment.apiUrl}/users`
+    )
+      .pipe(map((users) => {
+        return {
+          users: users.users.map((us:any) => {
+            return {
+              id: us._id,
+              username: us.username,
+              firstname: us.firstname,
+              lastname: us.lastname,
+              role: us.role,
+            };
+          })
+        };
+      })).subscribe(transformPosts => {
+        this.users = transformPosts.users;
+        this.usersUpdated.next({ users: [...this.users] });
+      });
+  }
+  getUsersUpdateListener() {
+    return this.usersUpdated.asObservable();
+  }
 
   setLocalStorage(responseObj: {
     token: string;
     expiresIn: string; }){
     const expires = moment().add(responseObj.expiresIn);
-
     localStorage.setItem('token', responseObj.token);
     localStorage.setItem('expires', JSON.stringify(expires.valueOf()));
 
@@ -105,8 +130,6 @@ export class AuthService {
     else{
       return null;
     }
-
-
   }
 
   getExpiration(){

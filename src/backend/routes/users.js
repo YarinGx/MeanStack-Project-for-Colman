@@ -33,6 +33,28 @@ router.get('/protected', passport.authenticate('jwt', {session: false}), (req, r
   res.status(200).json({sucess: true, msg: "user permitted"})
 });
 
+router.get('/', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  // User.find({_id : mongoose.Types.ObjectId(req.userId)}).then(user=>{
+  //   if(user.role !== "Admin"){
+  //     res.status(401).json({
+  //       message: "unauthorized"
+  //     });
+  //     return;
+  //   }
+  // })
+  User.find()
+    .then((users) => {
+      res.status(200).json({
+        message: "users fetched successfully",
+        users: users
+      });
+    }).catch(error => {
+    res.status(500).json({
+      message: "users get failed"
+    });
+  });
+});
+
 router.post('/login', function(req, res, next){
   console.log(req.body)
   User.findOne({username: req.body.username})
@@ -57,6 +79,7 @@ router.post('/login', function(req, res, next){
 });
 
 router.post('/register', function(req, res, next){
+  console.log(req.body)
   User.findOne({username: req.body.username})
     .then((user) => {
       if (user) {
@@ -78,11 +101,10 @@ router.post('/register', function(req, res, next){
         salt: salt,
         role: "User",
         firstname: req.body.firstname,
-        lastname: req.body.lastname
+        lastname: req.body.lastname,
+        email: req.body.username
 
       });
-
-
       newUser.save()
         .then(user => {
           const jwt = utils.issueJWT(user);

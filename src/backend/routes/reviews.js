@@ -44,6 +44,16 @@ router.post("", passport.authenticate('jwt', {session: false}), extractFile, (re
 
 
 router.put("/:id",passport.authenticate('jwt', {session: false}) , (req, res, next) => {
+
+  // Review.find().populate('creator', 'username').then(revArr => {
+  //   revArr.forEach(rev => {
+  //     if(rev.creator.id!==req.userId){
+  //       res.status(401).json({
+  //         message: "unauthorized"
+  //       });
+  //     }
+  //   })
+  // })
   const review = new Review({
     _id: req.body.id,
     title: req.body.title,
@@ -114,6 +124,15 @@ router.get("/:id", (req, res, next) => {
 })
 //
 router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  // Review.find().populate('creator', 'username').then(revArr => {
+  //   revArr.forEach(rev => {
+  //     if(rev.creator.id!==req.userId){
+  //       res.status(401).json({
+  //         message: "unauthorized"
+  //       });
+  //     }
+  //   })
+  // })
   Review.deleteOne({
     _id: req.params.id,
     creator: req.userId
