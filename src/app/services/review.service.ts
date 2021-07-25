@@ -92,22 +92,39 @@ export class ReviewService {
   }
 
   updateReview(id:string, title: string, review: string, image: File|null, addImage: boolean) {
-    let postDate: FormData;
-      postDate = new FormData();
-      postDate.append('id', id);
-      postDate.append('title', title);
-      postDate.append('review', review);
+    const body = { id: id, title: title, review: review };
+    return this.http
+      .put(BACKEND_URL + id, body)
+      .pipe(map(code => {
+        if(this.reviews){
+          let r = this.reviews.find(r => r['_id']==id);
+          if(r){
+            if(r.title && r.review){
+              r.title = title;
+              r.review = review;
+            }
+            this.reviews = this.reviews.filter(r=>r._id != id)
+            this.reviews.push(r);
+          }
 
-
-    this.http
-      .put(BACKEND_URL + id, postDate)
-      .subscribe(response => {
-        this.router.navigate(['/']);
-      });
+        }
+        this.postsUpdated.next({ reviews: this.reviews });
+        return code;
+      }));
   }
 
-  deletePost(postId: string) {
-    return this.http.delete(BACKEND_URL + postId);
+  deleteReview(postId: string) {
+    return this.http.delete(BACKEND_URL + postId)
+      .pipe(map(code => {
+        if(this.reviews){
+          let r = this.reviews.find(r => r['_id']==postId);
+          if(r){
+            this.reviews = this.reviews.filter(r=>r._id != postId)
+          }
+        }
+        this.postsUpdated.next({ reviews: this.reviews });
+        return code;
+      }));
   }
 
 

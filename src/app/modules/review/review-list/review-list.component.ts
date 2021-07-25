@@ -1,9 +1,11 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Review} from "../../../_models/review";
-import {Observable, Subscription} from "rxjs";
+import {Observable, Subscription, throwError} from "rxjs";
 import {ReviewService} from "../../../services/review.service";
 import {PageEvent} from "@angular/material/paginator";
 import {AuthService} from "../../../services/auth.service";
+import {first} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-review-list',
@@ -20,7 +22,7 @@ export class ReviewListComponent implements OnInit {
   @Output() newItemEvent = new EventEmitter<Review>();
   @Output() panStatus = new EventEmitter<string>();
 
-  constructor(public reviewsService: ReviewService, public authService: AuthService) {
+  constructor(public reviewsService: ReviewService, public authService: AuthService, private _snackBar: MatSnackBar) {
     this.reviewsService.getReviews()
     this.reviewSub = this.reviewsService.getReviewUpdateListener()
       .subscribe((reviewData: { reviews: Review[]}) => {
@@ -36,6 +38,29 @@ export class ReviewListComponent implements OnInit {
   gotoelement(review:Review) {
     this.newItemEvent.emit(review);
     this.panStatus.emit("edit");
+  }
+  deleteReview(review:Review){
+    this.reviewsService.deleteReview(review._id).pipe(first())
+      .subscribe(
+        data => {
+          // console.log(data)
+          this._snackBar.open("review deleted!", "close",{
+            duration: 3000
+          });
+        },
+        error => {
+          if (error.status !== 401){
+            this._snackBar.open("not logged in", "close",{
+              duration: 3000
+            });
+          }
+          if (error.status !== 201){
+            this._snackBar.open("internal issue", "close",{
+              duration: 3000
+            });
+          }
+          return throwError( error )
+        });
   }
 
 

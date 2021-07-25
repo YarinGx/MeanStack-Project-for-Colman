@@ -48,12 +48,12 @@ router.put("/:id",passport.authenticate('jwt', {session: false}) , (req, res, ne
     _id: req.body.id,
     title: req.body.title,
     review: req.body.review,
-    creator: req.userData.userId,
+    creator: req.userId,
   });
-  Comment.updateOne({
+  Review.updateOne({
     _id: req.params.id,
-    creator: req.userData.userId
-  }, comment).then(result => {
+    creator: req.userId
+  }, review).then(result => {
     if (result.n > 0) {
       res.status(200).json({
         message: "Update successful!"
@@ -113,6 +113,26 @@ router.get("/:id", (req, res, next) => {
   });
 })
 //
-// router.delete("/:id", passport.authenticate('jwt', {session: false}), CommentController.deleteComment);
+router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  Review.deleteOne({
+    _id: req.params.id,
+    creator: req.userId
+  }).then(result => {
+    if (result.n > 0) {
+      res.status(200).json({
+        message: "Success Delete"
+      });
+    } else {
+      res.status(401).json({
+        message: "Not authorized!"
+      });
+    }
+  }).catch(error => {
+    res.status(500).json({
+      message: "Fetching comment failed!"
+    });
+  });
+});
+
 
 module.exports = router;

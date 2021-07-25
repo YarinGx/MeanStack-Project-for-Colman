@@ -117,7 +117,29 @@ export class ReviewComponent implements OnInit {
         this.form.value.review,
         null,
         false
-      );
+      ).pipe(first())
+        .subscribe(
+          data => {
+            // console.log(data)
+            this.isLoading = false;
+            this._snackBar.open("review updated!", "close",{
+              duration: 3000
+            });
+          },
+          error => {
+            if (error.status !== 401){
+              this._snackBar.open("not logged in", "close",{
+                duration: 3000
+              });
+            }
+            if (error.status !== 201){
+              this._snackBar.open("internal issue", "close",{
+                duration: 3000
+              });
+            }
+            this.isLoading = false;
+            return throwError( error )
+          });
     }
     this.form.reset();
   }
