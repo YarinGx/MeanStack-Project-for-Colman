@@ -10,7 +10,7 @@ import {Map} from 'leaflet';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'finalProject3';
+  title = 'Welcome To Israel Hotels';
   currentUser!: User | null;
 
 
