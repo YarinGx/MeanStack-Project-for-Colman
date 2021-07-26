@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import * as d3 from 'd3-selection';
+import {Component, ElementRef, OnInit} from '@angular/core';
+import * as d3 from 'd3';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 import {ReviewService} from "../../../services/review.service";
@@ -14,96 +14,98 @@ import {Review} from "../../../_models/review";
 })
 export class CardComponent implements OnInit {
 
-  public StatsPieChart: any[] = [
-    {party: 'BJP', electionP: 56},
-    {party: 'INC', electionP: 18},
-    {party: 'AA', electionP: 10},
-    {party: 'CPI', electionP: 5},
-    {party: 'CPI-M', electionP: 5},
-    {party: 'BSP', electionP: 7},
-    {party: 'AITS',  electionP: 10}
+  public data: any[] = [
+    {_id: 'asd', value: 1},
+    {_id: 'sss', value: 12},
+    {_id: '1fff2', value: 19}
   ];
 
 
   title = 'D3 Pie Chart in Angular 10';
 
-  margin = {top: 20, right: 20, bottom: 30, left: 50};
-  width!: number;
-  height!: number;
-  radius!: number;
-
-  arc: any;
-  labelArc: any;
-  labelPer: any;
-  pie: any;
-  color: any;
-  svg: any;
+  private svg:any;
+  private margin = 50;
+  private width = 750;
+  private height = 600;
+  // The radius of the pie chart is half the smallest side
+  private radius = Math.min(this.width, this.height) / 2 - this.margin;
+  private colors:any;
 
   reviews: Review[] = [];
   reviewSub!: Subscription;
   reviewOb!: Observable<any>;
+  // data: Review[] = [];
 
 
-  constructor(public reviewsService: ReviewService) {
+  constructor(public reviewsService: ReviewService,private el: ElementRef) {
     // this.reviewsService.getReviews()
-    this.reviewSub = this.reviewsService.getReviewUpdateListener()
-      .subscribe((reviewData: { reviews: Review[]}) => {
-        this.reviews = reviewData.reviews
+    this.reviewSub = this.reviewsService.getMapReduce()
+      .subscribe((reviewData: any) => {
+
+        // this.reviews = reviewData.reviews
+        this.createSvg();
+        this.createColors(reviewData.result);
+        this.drawChart(reviewData.result);
+        console.log(reviewData.result)
       });
     this.reviewOb = this.reviewsService.getReviewUpdateListener();
-
-    this.width = 900 - this.margin.left - this.margin.right ;
-    this.height = 500 - this.margin.top - this.margin.bottom;
-    this.radius = Math.min(this.width, this.height) / 2;
-
 
   }
 
   ngOnInit(): void {
-    this.initSvg();
-    this.drawPie();
+
   }
 
-  initSvg() {
-    this.color = d3Scale.scaleOrdinal()
-      .range(['#FFA500', '#00FF00', '#FF0000', '#6b486b', '#FF00FF', '#d0743c', '#00FA9A']);
-    this.arc = d3Shape.arc()
-      .outerRadius(this.radius - 10)
-      .innerRadius(0);
-    this.labelArc = d3Shape.arc()
-      .outerRadius(this.radius - 40)
-      .innerRadius(this.radius - 40);
-
-    this.labelPer = d3Shape.arc()
-      .outerRadius(this.radius - 80)
-      .innerRadius(this.radius - 80);
-
-    this.pie = d3Shape.pie()
-      .sort(null)
-      .value((d: any) => d.electionP);
-
-    this.svg = d3.select('#pieChart')
-      .append('svg')
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('viewBox', '0 0 ' + Math.min(this.width, this.height) + ' ' + Math.min(this.width, this.height))
-      .append('g')
-      .attr('transform', 'translate(' + Math.min(this.width, this.height) / 2 + ',' + Math.min(this.width, this.height) / 2 + ')');
+  private createSvg(): void {
+    this.svg = d3.select("figure#pie")
+      .append("svg")
+      .attr("width", this.width)
+      .attr("height", this.height)
+      .append("g")
+      .attr(
+        "transform",
+        "translate(" + this.width / 2 + "," + this.height / 2 + ")"
+      );
   }
 
-  drawPie() {
-    const g = this.svg.selectAll('.arc')
-      .data(this.pie(this.StatsPieChart))
-      .enter().append('g')
-      .attr('class', 'arc');
-    g.append('path').attr('d', this.arc)
-      .style('fill', (d: any) => this.color(d.data.party) );
-    g.append('text').attr('transform', (d: any) => 'translate(' + this.labelArc.centroid(d) + ')')
-      .attr('dy', '.35em')
-      .text((d: any) => d.data.party);
-
-    g.append('text').attr('transform', (d: any) => 'translate(' + this.labelPer.centroid(d) + ')')
-      .attr('dy', '.35em')
-      .text((d: any) => d.data.electionP + '%');
+  private createColors(reviewData: any[]): void {
+    this.colors = d3.scaleOrdinal()
+      .domain(reviewData.map(d => d._id.toString()))
+      .range(["#c7d3ec", "#a5b8db", "#879cc4", "#677795", "#5a6782"]);
   }
+
+  private drawChart(reviewData: any[]): void {
+    // Compute the position of each group on the pie:
+    const pie = d3.pie<any>().value((d: any) => Number(d.value.n));
+
+    // Build the pie chart
+    this.svg
+      .selectAll('pieces')
+      .data(pie(reviewData))
+      .enter()
+      .append('path')
+      .attr('d', d3.arc()
+        .innerRadius(0)
+        .outerRadius(this.radius)
+      )
+      .attr('fill', (d: any, i: any) => (this.colors(i)))
+      .attr("stroke", "#121926")
+      .style("stroke-width", "1px");
+
+    // Add labels
+    const labelLocation = d3.arc()
+      .innerRadius(100)
+      .outerRadius(this.radius);
+
+    this.svg
+      .selectAll('pieces')
+      .data(pie(reviewData))
+      .enter()
+      .append('text')
+      .text((d: any) => d.data.value.name)
+      .attr("transform", (d: d3.DefaultArcObject) => "translate(" + labelLocation.centroid(d) + ")")
+      .style("text-anchor", "middle")
+      .style("font-size", 15);
+  }
+
 }

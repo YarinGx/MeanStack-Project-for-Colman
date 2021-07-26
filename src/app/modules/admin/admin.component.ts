@@ -32,15 +32,17 @@ export class AdminComponent implements OnInit {
       .subscribe((usersData: { users: any[]}) => {
         this.dataSource.data = usersData.users;
         this.users = usersData.users
+        console.log(this.users)
+        this.usersOb = this.authService.getUsersUpdateListener();
 
       });
-    this.usersOb = this.authService.getUsersUpdateListener();
+
 
 
   }
 
   ngOnInit(): void {
-    console.log(this.users)
+    // console.log(this.users)
     // console.log(this.users)
   }
 

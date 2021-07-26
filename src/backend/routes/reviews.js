@@ -42,7 +42,26 @@ router.post("", passport.authenticate('jwt', {session: false}), extractFile, (re
 
   })
 })
-
+router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  Review.deleteOne({
+    _id: req.params.id,
+    creator: req.userId
+  }).then(result => {
+    if (result.n > 0) {
+      res.status(200).json({
+        message: "Success Delete"
+      });
+    } else {
+      res.status(401).json({
+        message: "Not authorized!"
+      });
+    }
+  }).catch(error => {
+    res.status(500).json({
+      message: "Fetching comment failed!"
+    });
+  });
+});
 
 router.put("/:id",passport.authenticate('jwt', {session: false}) , (req, res, next) => {
 
@@ -83,28 +102,19 @@ router.put("/:id",passport.authenticate('jwt', {session: false}) , (req, res, ne
 
 });
 
-exports.getpostTitleD3MapReduce = (req, res, next) => {
-  var o = {}
-  o.map = function () {
-    emit(this.title, 1);
-  };
-  o.reduce = function (k, vals) {
-    return vals.length;
-  };
 
-  Post.mapReduce(o).then(docs => {
-    return res.status(200).json({
-      docs
-    });
-  }).catch(docs1 => {})
-};
 router.get("/mapreduce", (req, res, next) => {
   var o = {}
   o.map = function () {
-    emit(this.title, 1);
+    emit(this.title, {
+      name: this.title
+    });
   };
   o.reduce = function (k, vals) {
-    return vals.length;
+    return {
+      n: vals.length,
+      name: vals[0].name
+    };
   };
 
   Review.mapReduce(o).then(docs => {
@@ -152,35 +162,7 @@ router.get("/:id", (req, res, next) => {
   });
 })
 
-router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res, next) => {
-  // Review.find().populate('creator', 'username').then(revArr => {
-  //   revArr.forEach(rev => {
-  //     if(rev.creator.id!==req.userId){
-  //       res.status(401).json({
-  //         message: "unauthorized"
-  //       });
-  //     }
-  //   })
-  // })
-  Review.deleteOne({
-    _id: req.params.id,
-    creator: req.userId
-  }).then(result => {
-    if (result.n > 0) {
-      res.status(200).json({
-        message: "Success Delete"
-      });
-    } else {
-      res.status(401).json({
-        message: "Not authorized!"
-      });
-    }
-  }).catch(error => {
-    res.status(500).json({
-      message: "Fetching comment failed!"
-    });
-  });
-});
+
 
 
 

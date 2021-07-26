@@ -5,12 +5,13 @@
 <mat-divider></mat-divider>
 <br>
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
-  <mat-card fxFlex="25">
-    <app-card-widget></app-card-widget>
+  <mat-card fxFlex="100" *ngIf="userLoggedIn!=null && userLoggedIn!.role=='Admin'">
+    <app-card-widget ></app-card-widget>
   </mat-card>
 </div>
 <br>
 <mat-divider></mat-divider>
+
 <!--<br>-->
 <!--<div fxLayout="row" fxLayoutAlign="space-between center " fxLayoutGap="20px">-->
 <!--  <div fxLayout="60">chart</div>-->

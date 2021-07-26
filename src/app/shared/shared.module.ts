@@ -53,7 +53,7 @@ import {MyFilterPipe} from "../modules/review/review-list/review-filter";
     MapComponent,
     ReviewComponent,
     ReviewListComponent,
-    MyFilterPipe
+    MyFilterPipe,
   ],
   exports: [
     SidebarComponent,

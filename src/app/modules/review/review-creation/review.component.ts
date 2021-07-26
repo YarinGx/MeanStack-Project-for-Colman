@@ -111,6 +111,7 @@ export class ReviewComponent implements OnInit {
           });
     }
     else {
+      this.modeValue = 'create';
       this.reviewsService.updateReview(
         this.reviewId,
         this.form.value.title,
@@ -133,6 +134,7 @@ export class ReviewComponent implements OnInit {
               });
             }
             if (error.status !== 201){
+              console.log(error)
               this._snackBar.open("internal issue", "close",{
                 duration: 3000
               });

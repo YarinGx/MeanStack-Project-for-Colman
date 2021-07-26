@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
       })
 
 
-    console.log(this.userLoggedIn)
+    // console.log(this.userLoggedIn)
   }
 
 

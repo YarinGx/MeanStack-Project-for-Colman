@@ -127,6 +127,15 @@ export class ReviewService {
       }));
   }
 
+  getMapReduce() {
+    return this.http.get(BACKEND_URL + 'mapreduce')
+      .pipe(map((reviews:any) => {
+        return {
+          result: reviews.docs.results
+        };
+      }));
+  }
+
 
   getCms() {
     return this.http.get<{ docs: any[] }>(BACKEND_URL + 'sketch');
