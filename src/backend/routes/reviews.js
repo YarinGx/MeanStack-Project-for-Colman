@@ -7,6 +7,7 @@ const Review = require("../models/review");
 
 const extractFile = require("../lib/file");
 const mongoose = require("mongoose");
+const {emit} = require("cluster");
 const User = mongoose.model('User');
 
 const router = express.Router();
@@ -82,8 +83,36 @@ router.put("/:id",passport.authenticate('jwt', {session: false}) , (req, res, ne
 
 });
 
+exports.getpostTitleD3MapReduce = (req, res, next) => {
+  var o = {}
+  o.map = function () {
+    emit(this.title, 1);
+  };
+  o.reduce = function (k, vals) {
+    return vals.length;
+  };
 
+  Post.mapReduce(o).then(docs => {
+    return res.status(200).json({
+      docs
+    });
+  }).catch(docs1 => {})
+};
+router.get("/mapreduce", (req, res, next) => {
+  var o = {}
+  o.map = function () {
+    emit(this.title, 1);
+  };
+  o.reduce = function (k, vals) {
+    return vals.length;
+  };
 
+  Review.mapReduce(o).then(docs => {
+    return res.status(200).json({
+      docs
+    });
+  }).catch(docs1 => {})
+})
 
 router.get("", (req, res, next) => {
   Review.find().populate('creator', 'username')
@@ -122,7 +151,7 @@ router.get("/:id", (req, res, next) => {
     });
   });
 })
-//
+
 router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res, next) => {
   // Review.find().populate('creator', 'username').then(revArr => {
   //   revArr.forEach(rev => {
@@ -153,39 +182,6 @@ router.delete("/:id", passport.authenticate('jwt', {session: false}), (req, res,
   });
 });
 
-// Implement map-reduce and ggroup-by
-// router.get("/mapreduce", (req, res, next) => {
-//
-//   Review.mapReduce({hotelId : mongoose.Types.ObjectId(req.params.id)}).then(review => {
-//     if (review) {
-//       res.status(200).json(review);
-//     } else {
-//       res.status(404).json({
-//         message: "review not found"
-//       });
-//     }
-//   }).catch(error => {
-//     res.status(500).json({
-//       message: "Fetching review failed"
-//     });
-//   });
-// })
-//
-// router.get("/groupby", (req, res, next) => {
-//
-//   Review.groupby({hotelId : mongoose.Types.ObjectId(req.params.id)}).then(review => {
-//     if (review) {
-//       res.status(200).json(review);
-//     } else {
-//       res.status(404).json({
-//         message: "review not found"
-//       });
-//     }
-//   }).catch(error => {
-//     res.status(500).json({
-//       message: "Fetching review failed"
-//     });
-//   });
-// })
+
 
 module.exports = router;

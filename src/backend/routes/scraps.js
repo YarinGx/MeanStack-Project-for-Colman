@@ -1,5 +1,6 @@
 const express = require("express");
 const Scrap = require("../models/hotels");
+const {emit} = require("cluster");
 
 getAllScraps = (req, res, next) => {
   const pageSize = +req.query.pagesize;
@@ -46,7 +47,27 @@ getScrapById = (req, res, next) => {
 
 const router = express.Router();
 
+
+router.get("/groupby", (req, res, next) => {
+  console.log("works?");
+  Scrap.aggregate([{
+    "$group": {
+      _id:{city: "$city"},
+      // _id: "$hotelId",
+      count: {
+        $sum: 1
+      }
+    }
+  }]).then(result => {
+    console.log(result);
+    res.status(200).json({
+      message: "group successful!",
+      result: result
+    });
+  })
+})
 router.get("", getAllScraps);
 router.get("/:id", getScrapById);
+
 
 module.exports = router;
